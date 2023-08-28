@@ -25,6 +25,7 @@ export class MediaService {
   }
 
   async update(id: number, @Body() body: UpdateMediaDto) {
+    await this.findOne(id)
     await this.verifyAccount(body)
     return await this.mediaRepository.update(id, body);
   }
