@@ -4,26 +4,57 @@ import { UpdatePublicationDto } from './dto/update-publication.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class PublicationsService {
-  constructor(private readonly prisma: PrismaService) {}
-  
-  create(createPublicationDto: CreatePublicationDto) {
-    return 'This action adds a new publication';
+export class PublicationsRepository {
+  constructor(private readonly prisma: PrismaService) { }
+
+  create(data: CreatePublicationDto) {
+    return this.prisma.publication.create({
+      data
+    });
   }
 
   findAll() {
-    return `This action returns all publications`;
+    return this.prisma.publication.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} publication`;
+    return this.prisma.publication.findFirst({
+      where: {
+        id
+      }
+    });
   }
 
-  update(id: number, updatePublicationDto: UpdatePublicationDto) {
-    return `This action updates a #${id} publication`;
+  update(id: number, data: UpdatePublicationDto) {
+    return this.prisma.publication.update({
+      data,
+      where: {
+        id
+      }
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} publication`;
+    return this.prisma.publication.delete({
+      where: {
+        id
+      }
+    });
+  };
+
+  findPublicationByMediaID(mediaId: number) {
+    return this.prisma.publication.findFirst({
+      where: {
+        mediaId
+      }
+    });
+  };
+
+  findPublicationByPostID(postId: number) {
+    return this.prisma.publication.findFirst({
+      where: {
+        postId
+      }
+    })
   }
 }

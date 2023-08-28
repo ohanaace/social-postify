@@ -3,20 +3,20 @@ import { PrismaService } from "../prisma/prisma.service";
 import { UpdateMediaDto } from "./dto/update-media.dto";
 import { CreateMediaDto } from "./dto/create-media.dto";
 
-Injectable()
+@Injectable()
 export class MediaRepository {
   constructor(private readonly prisma: PrismaService) { }
-
+  
   create(createMediaDto: CreateMediaDto) {
     return this.prisma.media.create({
       data: createMediaDto
     });
   };
-
+  
   findAll() {
     return this.prisma.media.findMany();
   }
-
+  
   findOne(id: number) {
     return this.prisma.media.findFirst({
       where: {
@@ -24,7 +24,7 @@ export class MediaRepository {
       }
     });
   }
-
+  
   update(id: number, updateMediaDto: UpdateMediaDto) {
     return this.prisma.media.update({
       data: updateMediaDto,
@@ -33,12 +33,21 @@ export class MediaRepository {
       }
     });
   }
-
+  
   remove(id: number) {
-    return this.prisma.media.delete({
+    const deletedMedia = this.prisma.media.delete({
       where: {
         id
       }
     });
+    return deletedMedia;
   };
+  verifyAccount(title: string, username: string) {
+    return this.prisma.media.findFirst({
+      where: {
+        title,
+        username
+      }
+    })
+  }
 };

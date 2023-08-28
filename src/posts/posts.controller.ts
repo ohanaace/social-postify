@@ -1,34 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostsService) { }
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  async create(@Body() body: CreatePostDto) {
+    return await this.postsService.create(body);
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  async findAll() {
+    return await this.postsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const parseId = parseInt(id)
+    return await this.postsService.findOne(parseId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: UpdatePostDto) {
+    const parseId = parseInt(id)
+    return await this.postsService.update(parseId, body);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const parseId = parseInt(id)
+    return await this.postsService.remove(parseId);
   }
 }

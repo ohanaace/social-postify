@@ -1,34 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { PublicationsService } from './publications.service';
 import { CreatePublicationDto } from './dto/create-publication.dto';
 import { UpdatePublicationDto } from './dto/update-publication.dto';
 
 @Controller('publications')
 export class PublicationsController {
-  constructor(private readonly publicationsService: PublicationsService) {}
+  constructor(private readonly publicationsService: PublicationsService) { }
 
   @Post()
-  create(@Body() createPublicationDto: CreatePublicationDto) {
-    return this.publicationsService.create(createPublicationDto);
+  async create(@Body() body: CreatePublicationDto) {
+    return await this.publicationsService.create(body);
   }
 
   @Get()
-  findAll() {
-    return this.publicationsService.findAll();
+  async findAll() {
+    return await this.publicationsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.publicationsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const parseId = parseInt(id);
+    return await this.publicationsService.findOne(parseId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePublicationDto: UpdatePublicationDto) {
-    return this.publicationsService.update(+id, updatePublicationDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() body: UpdatePublicationDto) {
+    const parseId = parseInt(id);
+    return await this.publicationsService.update(parseId, body);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.publicationsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    const parseId = parseInt(id);
+    return await this.publicationsService.remove(parseId);
   }
 }
